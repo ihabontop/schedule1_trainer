@@ -65,5 +65,52 @@ namespace Schedule1Mod
                 return $"Error: {ex.Message}";
             }
         }
+
+        public static string RemoveCash(float amount)
+        {
+            try
+            {
+                var mm = GetMoneyManager();
+                if (mm == null) return "Not in game!";
+                mm.ChangeCashBalance(-amount);
+                return $"-${amount:N0} cash";
+            }
+            catch (System.Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
+        }
+
+        public static string AddOnline(float amount)
+        {
+            try
+            {
+                var mm = GetMoneyManager();
+                if (mm == null) return "Not in game!";
+                mm.onlineBalance = mm.onlineBalance + amount;
+                return $"+${amount:N0} bank";
+            }
+            catch (System.Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
+        }
+
+        public static string RemoveOnline(float amount)
+        {
+            try
+            {
+                var mm = GetMoneyManager();
+                if (mm == null) return "Not in game!";
+                float newBalance = mm.onlineBalance - amount;
+                if (newBalance < 0) newBalance = 0;
+                mm.onlineBalance = newBalance;
+                return $"-${amount:N0} bank";
+            }
+            catch (System.Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
+        }
     }
 }

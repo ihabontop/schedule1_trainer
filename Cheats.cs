@@ -1,5 +1,6 @@
 using Il2CppScheduleOne.PlayerScripts;
 using Il2CppScheduleOne.PlayerScripts.Health;
+using UnityEngine;
 
 namespace Schedule1Mod
 {
@@ -7,6 +8,81 @@ namespace Schedule1Mod
     {
         private static float origWalkSpeed = -1f;
         private static float origSprintMult = -1f;
+
+        private static Il2CppScheduleOne.Equipping.Equippable_RangedWeapon cachedWeapon;
+        private static float weaponCacheTime;
+
+        private static Il2CppScheduleOne.Equipping.Equippable_RangedWeapon GetRangedWeapon()
+        {
+            try
+            {
+                // Return cached weapon if still valid
+                if (cachedWeapon != null && Time.time - weaponCacheTime < 0.5f)
+                    return cachedWeapon;
+
+                // Throttle search when no weapon found (avoid FPS drop)
+                if (cachedWeapon == null && Time.time - weaponCacheTime < 0.5f)
+                    return null;
+
+                weaponCacheTime = Time.time;
+                var player = Player.Local;
+                if (player == null) { cachedWeapon = null; return null; }
+                cachedWeapon = player.GetComponentInChildren<Il2CppScheduleOne.Equipping.Equippable_RangedWeapon>();
+                return cachedWeapon;
+            }
+            catch { cachedWeapon = null; return null; }
+        }
+
+        private static int origMagazineSize = -1;
+
+        public static void ApplyInfiniteAmmo()
+        {
+            try
+            {
+                var weapon = GetRangedWeapon();
+                if (weapon == null) return;
+                // Save original magazine size
+                if (origMagazineSize < 0)
+                    origMagazineSize = weapon.MagazineSize;
+                // Set huge magazine
+                if (weapon.MagazineSize < 9999)
+                    weapon.MagazineSize = 9999;
+                // Auto-reload instantly when empty
+                if (weapon.Ammo <= 0)
+                {
+                    weapon.Reload();
+                    weapon.IsReloading = false;
+                }
+            }
+            catch { }
+        }
+
+        public static void ResetMagazine()
+        {
+            try
+            {
+                if (origMagazineSize > 0)
+                {
+                    var weapon = GetRangedWeapon();
+                    if (weapon != null)
+                        weapon.MagazineSize = origMagazineSize;
+                    origMagazineSize = -1;
+                }
+            }
+            catch { }
+        }
+
+        public static void ApplyNoReload()
+        {
+            try
+            {
+                var weapon = GetRangedWeapon();
+                if (weapon == null) return;
+                if (weapon.IsReloading)
+                    weapon.IsReloading = false;
+            }
+            catch { }
+        }
 
         public static void ApplyGodMode()
         {

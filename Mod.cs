@@ -11,6 +11,8 @@ namespace Schedule1Mod
         public static bool InfiniteEnergy = false;
         public static bool PoliceIgnore = false;
         public static bool SpeedHack = false;
+        public static bool InfiniteAmmo = false;
+        public static bool NoReload = false;
 
         private static CursorLockMode previousLockState;
         private static bool previousCursorVisible;
@@ -47,6 +49,8 @@ namespace Schedule1Mod
             if (InfiniteEnergy) Cheats.ApplyInfiniteEnergy();
             if (SpeedHack) Cheats.ApplySpeedHack();
             if (PoliceIgnore) Cheats.ApplyPoliceIgnore();
+            if (InfiniteAmmo) Cheats.ApplyInfiniteAmmo();
+            if (NoReload) Cheats.ApplyNoReload();
         }
 
         public override void OnGUI()
