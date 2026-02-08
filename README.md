@@ -46,7 +46,8 @@ MelonLoader mod for **Schedule I** — internal trainer with mod menu and police
 
 ## Screenshots
 
-> Press F1 in-game to open the trainer menu. Press F2 for police ESP overlay.
+> Press F1 in-game to open the trainer menu. Press F2 for police ESP overlay.<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9035f9e8-4d74-4fc6-b724-33866cd2dff4" />
+
 
 ## Project Structure
 
